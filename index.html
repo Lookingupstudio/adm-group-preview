@@ -387,6 +387,153 @@
   .btn-red { display: inline-block; background: var(--red); color: var(--white); padding: 18px 52px; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; font-family: Aptos, 'Segoe UI', sans-serif; font-weight: 600; transition: background 0.3s, transform 0.3s; position: relative; }
   .btn-red:hover { background: #d63020; transform: translateY(-2px); }
 
+  /* ===================== CONTACT FORM ===================== */
+  .contact-section {
+    background: var(--dark);
+    padding: 120px 52px;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-bg-text {
+    position: absolute;
+    font-family: Aptos, 'Segoe UI', sans-serif;
+    font-size: 320px; font-weight: 600;
+    color: rgba(255,255,255,0.025);
+    letter-spacing: -12px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none; white-space: nowrap; user-select: none;
+  }
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: start;
+    position: relative; z-index: 2;
+    max-width: 1200px;
+  }
+  .contact-title {
+    font-size: clamp(44px, 6vw, 84px);
+    font-weight: 600; line-height: 0.92;
+    letter-spacing: -2px; color: var(--white);
+    margin-bottom: 52px; margin-top: 24px;
+  }
+  .contact-details { display: flex; flex-direction: column; gap: 10px; }
+  .contact-detail-link {
+    font-size: 13px; color: rgba(255,255,255,0.4);
+    text-decoration: none; transition: color 0.25s;
+    font-family: 'Calibri Light', Calibri, sans-serif;
+  }
+  .contact-detail-link:hover { color: var(--red); }
+
+  /* FORM */
+  .contact-form { display: flex; flex-direction: column; gap: 0; }
+  .cf-success { display: none; text-align: center; padding: 60px 0; }
+  .cf-success-check {
+    width: 64px; height: 64px; border-radius: 50%;
+    border: 2px solid var(--red);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; color: var(--red);
+    margin: 0 auto 24px;
+    animation: successPop 0.5s cubic-bezier(0.16,1,0.3,1);
+  }
+  @keyframes successPop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .cf-success-title { font-size: 24px; font-weight: 600; color: var(--white); font-family: Aptos, 'Segoe UI', sans-serif; margin-bottom: 8px; }
+  .cf-success-sub { font-size: 14px; color: rgba(255,255,255,0.4); }
+
+  .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .cf-field {
+    position: relative;
+    padding-top: 20px;
+    margin-bottom: 32px;
+  }
+  .cf-field input, .cf-field textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    padding: 10px 0;
+    font-size: 15px;
+    color: var(--white);
+    font-family: 'Calibri Light', Calibri, sans-serif;
+    outline: none;
+    resize: none;
+    transition: border-color 0.3s;
+  }
+  .cf-field textarea { min-height: 80px; }
+  .cf-field label {
+    position: absolute;
+    top: 30px; left: 0;
+    font-size: 13px; letter-spacing: 1px;
+    color: rgba(255,255,255,0.3);
+    pointer-events: none;
+    transition: top 0.3s cubic-bezier(0.16,1,0.3,1), font-size 0.3s, color 0.3s, letter-spacing 0.3s;
+    font-family: 'Calibri Light', Calibri, sans-serif;
+  }
+  .cf-field input:focus ~ label,
+  .cf-field input:not(:placeholder-shown) ~ label,
+  .cf-field textarea:focus ~ label,
+  .cf-field textarea:not(:placeholder-shown) ~ label {
+    top: 0; font-size: 9px; letter-spacing: 3px;
+    color: var(--red); text-transform: uppercase;
+  }
+  .cf-line {
+    position: absolute; bottom: 0; left: 0;
+    height: 1px; width: 0;
+    background: var(--red);
+    transition: width 0.4s cubic-bezier(0.23,1,0.32,1);
+  }
+  .cf-field input:focus ~ .cf-line,
+  .cf-field textarea:focus ~ .cf-line { width: 100%; }
+
+  /* TYPE BUTTONS */
+  .cf-type { margin-bottom: 32px; }
+  .cf-type-label {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); margin-bottom: 14px;
+    font-family: Aptos, 'Segoe UI', sans-serif; font-weight: 600;
+  }
+  .cf-type-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cf-type-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.4);
+    padding: 8px 18px; font-size: 11px;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    font-family: Aptos, 'Segoe UI', sans-serif; font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .cf-type-btn:hover { border-color: rgba(255,255,255,0.4); color: var(--white); }
+  .cf-type-btn.active { background: var(--red); border-color: var(--red); color: var(--white); }
+
+  /* SUBMIT */
+  .cf-submit {
+    display: inline-flex; align-items: center; gap: 16px;
+    background: var(--red); color: var(--white);
+    border: none; padding: 18px 44px;
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    font-family: Aptos, 'Segoe UI', sans-serif; font-weight: 600;
+    cursor: pointer; transition: background 0.3s, gap 0.3s, transform 0.3s;
+    position: relative; overflow: hidden; margin-top: 8px;
+    align-self: flex-start;
+  }
+  .cf-submit:hover { background: #d63020; gap: 24px; }
+  .cf-submit:hover .cf-submit-arrow { transform: translateX(4px); }
+  .cf-submit-arrow { font-size: 18px; transition: transform 0.3s; display: inline-block; }
+  .cf-submit-loader {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: var(--white);
+    border-radius: 50%;
+    display: none;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .cf-submit.loading .cf-submit-text,
+  .cf-submit.loading .cf-submit-arrow { display: none; }
+  .cf-submit.loading .cf-submit-loader { display: block; }
+
   /* FOOTER */
   footer { background: #1a1517; padding: 52px; display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; gap: 40px; border-top: 1px solid rgba(255,255,255,0.05); }
   .footer-logo svg { height: 28px; width: auto; }
@@ -536,39 +683,7 @@
   <div style="text-align:center;margin-top:60px;" class="reveal"><a href="file:///Users/mattia/Downloads/adm_home_6.html#" class="btn-red">Vedi tutto il portfolio</a></div>
 </section>
 
-<!-- ABOUT -->
-<section class="step-section" id="metodo">
-  <div class="step-intro">
-    <div class="step-intro-tag clip-left">Il nostro processo</div>
-    <h2 class="step-intro-title split-reveal">
-      <span class="sr-line"><span class="sr-inner">Con voi in ogni</span></span>
-      <span class="sr-line"><span class="sr-inner">fase del progetto.</span></span>
-    </h2>
-    <p class="step-intro-text fade-up">Dalla prima chiamata alla consegna finale, ogni passo è pensato per semplificare la collaborazione e garantire risultati che superano le aspettative.</p>
-  </div>
-  <div class="steps-list">
-    <div class="step-item">
-      <div class="step-letter">(a)</div>
-      <div class="step-label">Brief &amp;<br>Strategia<span>Dove nascono le idee</span></div>
-      <div class="step-body">Ascoltiamo e interpretiamo le vostre necessità con cura e attenzione. Il dialogo aperto e la condivisione delle visioni sono il punto di partenza per ogni progetto di successo.</div>
-    </div>
-    <div class="step-item">
-      <div class="step-letter">(b)</div>
-      <div class="step-label">Concept &amp;<br>Design<span>Dove la creatività prende forma</span></div>
-      <div class="step-body">I nostri creativi trasformano la strategia in soluzioni visive distintive. Ogni proposta è dettagliata, originale e costruita intorno all'unicità del vostro brand.</div>
-    </div>
-    <div class="step-item">
-      <div class="step-letter">(c)</div>
-      <div class="step-label">Produzione &amp;<br>Realizzazione<span>Dove lo straordinario è possibile</span></div>
-      <div class="step-body">Artigiani e tecnici esperti concretizzano ogni idea con la massima precisione. Tecnologie avanzate e materiali selezionati garantiscono standard qualitativi elevati.</div>
-    </div>
-    <div class="step-item">
-      <div class="step-letter">(d)</div>
-      <div class="step-label">Lancio &amp;<br>Supporto<span>Dove il progetto diventa realtà</span></div>
-      <div class="step-body">Presenza sul campo, attenzione e disponibilità continua. La nostra esperienza permette di anticipare ogni necessità e gestire ogni dettaglio fino alla fine.</div>
-    </div>
-  </div>
-</section><section class="about-strip" id="about">
+<section class="about-strip" id="about">
   <div class="about-content reveal">
     <p class="section-tag clip-left">Chi siamo</p>
     <h2 class="section-title split-reveal"><span class="sr-line"><span class="sr-inner">Il metodo</span></span><span class="sr-line"><span class="sr-inner">ADM</span></span></h2>
@@ -605,11 +720,67 @@
     <span class="sr-line"><span class="sr-inner">e persone che osano</span></span>
     <span class="sr-line"><span class="sr-inner" style="color:var(--red)">essere diversi.</span></span>
   </div>
-</div><section class="cta" id="contatti">
-  <p class="section-tag clip-left">Inizia il tuo progetto</p>
-  <h2 class="cta-title split-reveal"><span class="sr-line"><span class="sr-inner">Hai un'idea?</span></span><span class="sr-line"><span class="sr-inner">Costruiamola</span></span><span class="sr-line"><span class="sr-inner"><span>insieme.</span></span></span></h2>
-  <br><br>
-  <a href="mailto:info@admgroupsrl.com" class="btn-red">Contattaci ora</a>
+</div><section class="contact-section" id="contatti">
+  <div class="contact-bg-text">ADM</div>
+  <div class="contact-inner">
+    <div class="contact-left reveal">
+      <p class="section-tag clip-left" style="color:rgba(255,255,255,0.35)">Inizia il tuo progetto</p>
+      <h2 class="contact-title split-reveal">
+        <span class="sr-line"><span class="sr-inner">Hai un'idea?</span></span>
+        <span class="sr-line"><span class="sr-inner">Costruiamola</span></span>
+        <span class="sr-line"><span class="sr-inner" style="color:var(--red)">insieme.</span></span>
+      </h2>
+      <div class="contact-details">
+        <a href="mailto:info@admgroupsrl.com" class="contact-detail-link">info@admgroupsrl.com</a>
+        <a href="tel:+393481454483" class="contact-detail-link">+39 348 145 4483</a>
+      </div>
+    </div>
+    <div class="contact-right reveal">
+      <form class="contact-form" id="contactForm" onsubmit="handleFormSubmit(event)">
+        <div class="cf-row">
+          <div class="cf-field">
+            <input type="text" id="cf-nome" placeholder=" " required autocomplete="off">
+            <label for="cf-nome">Nome e Cognome</label>
+            <span class="cf-line"></span>
+          </div>
+          <div class="cf-field">
+            <input type="text" id="cf-azienda" placeholder=" " autocomplete="off">
+            <label for="cf-azienda">Azienda</label>
+            <span class="cf-line"></span>
+          </div>
+        </div>
+        <div class="cf-field">
+          <input type="email" id="cf-email" placeholder=" " required autocomplete="off">
+          <label for="cf-email">Email</label>
+          <span class="cf-line"></span>
+        </div>
+        <div class="cf-type">
+          <p class="cf-type-label">Tipo di progetto</p>
+          <div class="cf-type-grid">
+            <button type="button" class="cf-type-btn active" onclick="selectType(this)">Stand Fieristici</button>
+            <button type="button" class="cf-type-btn" onclick="selectType(this)">Event Design</button>
+            <button type="button" class="cf-type-btn" onclick="selectType(this)">Contract &amp; Retail</button>
+            <button type="button" class="cf-type-btn" onclick="selectType(this)">Altro</button>
+          </div>
+        </div>
+        <div class="cf-field cf-field-textarea">
+          <textarea id="cf-messaggio" placeholder=" " rows="3"></textarea>
+          <label for="cf-messaggio">Raccontaci il tuo progetto</label>
+          <span class="cf-line"></span>
+        </div>
+        <button type="submit" class="cf-submit" id="cfSubmit">
+          <span class="cf-submit-text">Invia messaggio</span>
+          <span class="cf-submit-arrow">→</span>
+          <span class="cf-submit-loader"></span>
+        </button>
+      </form>
+      <div class="cf-success" id="cfSuccess">
+        <div class="cf-success-check">✓</div>
+        <p class="cf-success-title">Messaggio inviato.</p>
+        <p class="cf-success-sub">Ti risponderemo entro 24 ore.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- FOOTER -->
@@ -974,10 +1145,14 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   .parallax-wrap { height: 300px; }
   .parallax-text-overlay { font-size: clamp(18px, 5vw, 26px); bottom: 28px; left: 24px; right: 24px; }
 
-  /* CTA */
-  .cta { padding: 80px 24px; }
-  .cta-title { font-size: clamp(40px, 10vw, 72px); letter-spacing: -1px; }
-  .btn-red { padding: 16px 36px; font-size: 10px; }
+  /* CONTACT FORM MOBILE */
+  .contact-section { padding: 72px 24px; }
+  .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+  .contact-title { font-size: clamp(40px, 10vw, 64px); letter-spacing: -1px; margin-bottom: 32px; }
+  .cf-row { grid-template-columns: 1fr; gap: 0; }
+  .cf-type-grid { gap: 8px; }
+  .cf-type-btn { font-size: 10px; padding: 8px 14px; }
+  .cf-submit { padding: 16px 32px; width: 100%; justify-content: center; }
 
   /* FOOTER */
   footer { grid-template-columns: 1fr; padding: 40px 24px; gap: 28px; text-align: center; }
@@ -1150,5 +1325,30 @@ function handleParallax() {
 
 window.addEventListener('scroll', handleParallax, { passive: true });
 handleParallax();
+</script>
+
+<script>
+function selectType(btn) {
+  document.querySelectorAll('.cf-type-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function handleFormSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('cfSubmit');
+  btn.classList.add('loading');
+  setTimeout(() => {
+    document.getElementById('contactForm').style.display = 'none';
+    const success = document.getElementById('cfSuccess');
+    success.style.display = 'block';
+    success.style.opacity = '0';
+    success.style.transform = 'translateY(20px)';
+    success.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    requestAnimationFrame(() => {
+      success.style.opacity = '1';
+      success.style.transform = 'translateY(0)';
+    });
+  }, 1400);
+}
 </script>
 </body></html>
