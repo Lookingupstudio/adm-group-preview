@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)file:///Users/mattia/Downloads/adm_home_6.html -->
+<html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADM Group — Progettiamo e costruiamo spazi di connessione</title>
+<style>
+  :root {
+    --red: #FF4632;
+    --dark: #4E4547;
+    --white: #FFFFFF;
+    --offwhite: #F7F5F5;
+    --light: #EFEFED;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--white);
+    color: var(--dark);
+    font-family: 'Calibri Light', Calibri, 'Segoe UI', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  h1,h2,h3,h4,.nav-links a,.section-tag,.exp-num,.footer-logo,.blog-cat,.port-event,.hero-tag,.stat-label,.marquee-item {
+    font-family: Aptos, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  }
+
+  /* ===================== LOADER ===================== */
+  #loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    pointer-events: all;
+  }
+
+  /* Red panel slides in from left */
+  .loader-panel-red {
+    position: absolute;
+    inset: 0;
+    background: var(--red);
+    transform: translateX(0);
+    transition: transform 0.7s cubic-bezier(0.77,0,0.18,1) 1.6s;
+  }
+  /* Dark panel behind */
+  .loader-panel-dark {
+    position: absolute;
+    inset: 0;
+    background: var(--dark);
+    transform: translateX(0);
+    transition: transform 0.7s cubic-bezier(0.77,0,0.18,1) 1.8s;
+  }
+
+  .loader-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  /* Logo reveal: clips from bottom */
+  .loader-logo {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
+  }
+  .loader-logo svg { width: 220px; height: auto; }
+  .loader-logo svg path { fill: var(--white); }
+
+  /* Counter */
+  .loader-counter {
+    position: absolute;
+    bottom: 40px;
+    right: 52px;
+    font-family: Aptos, 'Segoe UI', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.4);
+    z-index: 3;
+  }
+  #count { color: var(--white); }
+
+  /* Line that grows */
+  .loader-line {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    background: rgba(255,255,255,0.25);
+    width: 0;
+    transition: width 1.4s cubic-bezier(0.23,1,0.32,1) 0.2s;
+  }
+  .loader-line-fill {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    background: var(--white);
+    width: 0;
+    transition: width 1.3s cubic-bezier(0.23,1,0.32,1) 0.3s;
+  }
+
+  /* When loader is done */
+  #loader.done .loader-panel-red { transform: translateX(-100%); }
+  #loader.done .loader-panel-dark { transform: translateX(-100%); }
+  #loader.done { pointer-events: none; }
+
+  /* ===================== HERO WORD REVEAL ===================== */
+  .page-content {
+    opacity: 0;
+    transition: opacity 0.01s;
+  }
+  .page-content.visible { opacity: 1; }
+
+  /* Each word in hero title clips up */
+  .word-wrap {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+  .word-inner {
+    display: inline-block;
+    transform: translateY(110%);
+    transition: transform 0.9s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  /* ===================== CURSOR ===================== */
+  .cursor-dot {
+    width: 8px; height: 8px;
+    background: var(--red);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%,-50%);
+  }
+  .cursor-circle {
+    width: 40px; height: 40px;
+    border: 1.5px solid var(--red);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: width 0.3s, height 0.3s, opacity 0.3s, border-color 0.3s;
+    opacity: 0.6;
+  }
+
+  /* ===================== NAV ===================== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 26px 52px;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(78,69,71,0.07);
+    transform: translateY(-100%);
+    transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  }
+  nav.visible { transform: translateY(0); }
+  .nav-logo svg { height: 34px; width: auto; }
+  .nav-links { display: flex; gap: 44px; list-style: none; align-items: center; }
+  .nav-links a {
+    font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--dark); text-decoration: none; opacity: 0.6; font-weight: 600;
+    transition: opacity 0.25s, color 0.25s;
+  }
+  .nav-links a:hover { opacity: 1; color: var(--red); }
+  .nav-links .cta-link {
+    background: var(--red); color: var(--white); padding: 10px 26px;
+    opacity: 1; font-size: 10px; transition: background 0.25s;
+  }
+  .nav-links .cta-link:hover { background: #d63020; }
+
+  /* ===================== HERO ===================== */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    padding-top: 92px;
+    position: relative; overflow: hidden;
+  }
+  .hero-top {
+    flex: 1;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 80px 52px 60px;
+    position: relative; z-index: 2;
+  }
+  .hero-tag {
+    font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--red); margin-bottom: 28px; font-weight: 600;
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .hero-tag.in { opacity: 1; transform: translateY(0); }
+
+  .hero-title {
+    font-size: clamp(60px, 9.5vw, 134px);
+    line-height: 0.9; letter-spacing: -3px;
+    color: var(--dark); font-weight: 600;
+    overflow: visible;
+  }
+  .hero-title .line { display: block; overflow: hidden; }
+  .hero-title span.red { color: var(--red); }
+
+  /* Horizontal rule that draws */
+  .hero-rule {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 1px;
+    background: var(--light);
+    width: 0;
+    transition: width 1s cubic-bezier(0.23,1,0.32,1) 0.2s;
+  }
+  .hero-rule.in { width: 100%; }
+
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    min-height: 340px;
+  }
+  .hero-block {
+    position: relative; overflow: hidden;
+    transform: translateY(60px); opacity: 0;
+    transition: transform 0.9s cubic-bezier(0.16,1,0.3,1), opacity 0.7s ease;
+  }
+  .hero-block.in { transform: translateY(0); opacity: 1; }
+  .hero-block-1 { transition-delay: 0.1s !important; }
+  .hero-block-2 { transition-delay: 0.22s !important; }
+  .hero-block-3 { transition-delay: 0.34s !important; }
+
+  .block-inner {
+    width: 100%; height: 100%; min-height: 340px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .block-stand { background: linear-gradient(135deg, #4e4547 0%, #2a2527 100%); }
+  .block-event { background: linear-gradient(135deg, #3a3336 0%, #4e4547 100%); }
+  .block-red { background: var(--red); flex-direction: column; justify-content: flex-end; padding: 44px; }
+
+  .hero-img-label {
+    position: absolute; bottom: 24px; left: 24px;
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 600;
+    font-family: Aptos, 'Segoe UI', sans-serif;
+  }
+  .block-red p {
+    font-size: 15px; line-height: 1.75; color: rgba(255,255,255,0.82);
+    margin-bottom: 32px;
+  }
+  .block-red a {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--white); text-decoration: none; font-weight: 600;
+    font-family: Aptos, 'Segoe UI', sans-serif;
+    display: inline-flex; align-items: center; gap: 10px;
+    transition: gap 0.3s;
+  }
+  .block-red a:hover { gap: 18px; }
+  .block-red a::after { content: '→'; font-size: 16px; }
+
+  /* Hover zoom on image blocks */
+  .block-img-content {
+    width: 100%; height: 100%; min-height: 340px;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.7s cubic-bezier(0.23,1,0.32,1);
+  }
+  .hero-block:hover .block-img-content { transform: scale(1.04); }
+
+  /* ===================== MARQUEE ===================== */
+  .marquee-wrap {
+    background: var(--dark); padding: 15px 0; overflow: hidden;
+  }
+  .marquee-track {
+    display: flex; animation: marquee 30s linear infinite; white-space: nowrap;
+  }
+  .marquee-item {
+    font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+    color: rgba(255,255,255,0.28); padding: 0 44px;
+    display: flex; align-items: center; gap: 44px; font-weight: 600;
+  }
+  .marquee-item .dot { width: 4px; height: 4px; background: var(--red); border-radius: 50%; flex-shrink: 0; }
+
+  /* ===================== SECTIONS ===================== */
+  .expertize, .portfolio, .blog { padding: 120px 52px; }
+  .expertize { background: var(--white); }
+  .portfolio { background: var(--offwhite); }
+  .blog { background: var(--white); }
+
+  .section-header {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: flex-end; margin-bottom: 80px;
+  }
+  .section-tag {
+    font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--red); margin-bottom: 20px; font-weight: 600;
+  }
+  .section-title {
+    font-size: clamp(44px, 6vw, 76px); line-height: 0.95;
+    letter-spacing: -1.5px; color: var(--dark); font-weight: 600;
+  }
+  .section-desc { font-size: 15px; line-height: 1.8; color: rgba(78,69,71,0.5); align-self: flex-end; }
+
+  .expertize-grid {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 2px; background: var(--light);
+  }
+  .exp-card {
+    background: var(--white); padding: 52px 44px;
+    position: relative; overflow: hidden; transition: background 0.35s;
+  }
+  .exp-card::after {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--red); transform: scaleY(0); transform-origin: bottom;
+    transition: transform 0.4s cubic-bezier(0.23,1,0.32,1);
+  }
+  .exp-card:hover { background: var(--offwhite); }
+  .exp-card:hover::after { transform: scaleY(1); }
+  .exp-num { font-size: 10px; letter-spacing: 3px; color: var(--red); margin-bottom: 36px; font-weight: 600; }
+  .exp-title { font-size: 34px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 20px; line-height: 1; color: var(--dark); }
+  .exp-text { font-size: 14px; line-height: 1.85; color: rgba(78,69,71,0.5); }
+  .exp-arrow {
+    margin-top: 40px; font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--dark); text-decoration: none; display: inline-flex; align-items: center;
+    gap: 10px; opacity: 0; transition: opacity 0.3s, gap 0.3s;
+    font-family: Aptos, 'Segoe UI', sans-serif; font-weight: 600;
+  }
+  .exp-card:hover .exp-arrow { opacity: 1; }
+  .exp-arrow:hover { gap: 18px; }
+  .exp-arrow::after { content: '→'; }
+
+  /* PORTFOLIO */
+  .portfolio-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto; gap: 3px; margin-top: 70px;
+  }
+  .port-item { position: relative; overflow: hidden; background: var(--dark); aspect-ratio: 4/3; }
+  .port-item.large { grid-row: span 2; aspect-ratio: unset; }
+  .port-inner { width: 100%; height: 100%; min-height: 300px; display: flex; align-items: center; justify-content: center; transition: transform 0.7s cubic-bezier(0.23,1,0.32,1); }
+  .port-item:hover .port-inner { transform: scale(1.05); }
+  .port-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 32px 36px; background: linear-gradient(to top, rgba(78,69,71,0.85), transparent);
+    transform: translateY(8px); transition: transform 0.4s;
+  }
+  .port-item:hover .port-info { transform: translateY(0); }
+  .port-client { font-family: Aptos, 'Segoe UI', sans-serif; font-size: 20px; font-weight: 600; color: var(--white); margin-bottom: 6px; }
+  .port-event { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--red); font-weight: 600; margin-bottom: 8px; }
+
+  /* ABOUT */
+  .about-strip { display: grid; grid-template-columns: 1fr 1fr; min-height: 500px; }
+  .about-content { background: var(--dark); padding: 100px 64px; display: flex; flex-direction: column; justify-content: center; }
+  .about-content .section-tag { color: rgba(255,255,255,0.35); }
+  .about-content .section-title { color: var(--white); margin-bottom: 32px; }
+  .about-text { font-size: 15px; line-height: 1.85; color: rgba(255,255,255,0.45); margin-bottom: 52px; max-width: 480px; }
+  .about-stats { display: flex; gap: 52px; }
+  .stat-num { font-size: 52px; font-weight: 600; color: var(--red); line-height: 1; letter-spacing: -1px; font-family: Aptos, 'Segoe UI', sans-serif; }
+  .stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.28); margin-top: 8px; font-weight: 600; }
+  .about-visual { background: var(--red); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .about-big-text { font-family: Aptos, 'Segoe UI', sans-serif; font-size: 130px; font-weight: 600; color: rgba(255,255,255,0.07); letter-spacing: -6px; text-align: center; padding: 40px; user-select: none; }
+  .about-quote { position: absolute; bottom: 52px; left: 52px; right: 52px; font-size: 20px; line-height: 1.5; color: var(--white); font-family: Aptos, 'Segoe UI', sans-serif; font-weight: 600; letter-spacing: -0.3px; }
+
+  /* BLOG */
+  .blog-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; margin-top: 70px; }
+  .blog-card { border-top: 2px solid var(--light); padding-top: 28px; transition: border-color 0.3s; }
+  .blog-card:hover { border-color: var(--red); }
+  .blog-cat { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--red); margin-bottom: 14px; font-weight: 600; }
+  .blog-title { font-size: 20px; font-weight: 600; line-height: 1.25; color: var(--dark); margin-bottom: 14px; letter-spacing: -0.3px; font-family: Aptos, 'Segoe UI', sans-serif; }
+  .blog-excerpt { font-size: 13px; line-height: 1.75; color: rgba(78,69,71,0.5); margin-bottom: 24px; }
+  .blog-link { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--dark); text-decoration: none; font-family: Aptos, 'Segoe UI', sans-serif; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: color 0.25s, gap 0.3s; }
+  .blog-link:hover { color: var(--red); gap: 14px; }
+  .blog-link::after { content: '→'; }
+
+  /* CTA */
+  .cta { background: var(--dark); padding: 140px 52px; text-align: center; position: relative; overflow: hidden; }
+  .cta::before { content: 'ADM'; position: absolute; font-family: Aptos, 'Segoe UI', sans-serif; font-size: 300px; font-weight: 600; color: rgba(255,255,255,0.025); letter-spacing: -10px; top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; white-space: nowrap; }
+  .cta .section-tag { color: rgba(255,255,255,0.28); margin-bottom: 24px; }
+  .cta-title { font-size: clamp(52px, 8vw, 108px); font-weight: 600; color: var(--white); line-height: 0.92; letter-spacing: -2px; margin-bottom: 52px; position: relative; }
+  .cta-title span { color: var(--red); }
+  .btn-red { display: inline-block; background: var(--red); color: var(--white); padding: 18px 52px; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; font-family: Aptos, 'Segoe UI', sans-serif; font-weight: 600; transition: background 0.3s, transform 0.3s; position: relative; }
+  .btn-red:hover { background: #d63020; transform: translateY(-2px); }
+
+  /* FOOTER */
+  footer { background: #1a1517; padding: 52px; display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: center; gap: 40px; border-top: 1px solid rgba(255,255,255,0.05); }
+  .footer-logo svg { height: 28px; width: auto; }
+  .footer-nav { display: flex; gap: 32px; justify-content: center; list-style: none; }
+  .footer-nav a { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); text-decoration: none; font-family: Aptos, 'Segoe UI', sans-serif; font-weight: 600; transition: color 0.25s; }
+  .footer-nav a:hover { color: var(--red); }
+  .footer-right { text-align: right; }
+  .footer-contact { font-size: 13px; color: var(--red); text-decoration: none; display: block; margin-bottom: 6px; transition: opacity 0.25s; }
+  .footer-contact:hover { opacity: 0.7; }
+  .footer-copy { font-size: 10px; color: rgba(255,255,255,0.18); letter-spacing: 1px; margin-top: 6px; }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ANIMATIONS */
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+</style>
+</head>
+<body>
+
+<!-- ====== LOADER ====== -->
+<div id="loader" class="done" style="display: none;">
+  <div class="loader-panel-dark"></div>
+  <div class="loader-panel-red"></div>
+  <div class="loader-content" id="loaderContent">
+    <div class="loader-logo" id="loaderLogo" style="opacity: 1; transform: translateY(0px);">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520.17 328.69">
+        <path d="M499.63,265.14h10.43c4.19,0,7.08,2.16,7.08,6.57s-2.89,6.58-7.08,6.58H499.63Zm-3,29.54h3V280.9h11.1c5.7,0,9.44-3.37,9.44-9.19s-3.74-9.18-9.44-9.18H496.6Zm-33.05-11.57c0,6.62,3.51,12.25,12.33,12.25s12.39-5.63,12.39-12.25V262.53h-3v19.91c.05,7.47-3.47,10.31-9.36,10.31s-9.35-2.84-9.31-10.31V262.53h-3Zm-33.6-4.5c0-7,3.56-14.15,12-14.15s11.95,7.12,11.95,14.15-3.57,14.14-11.95,14.14-12-7.12-12-14.14m-3,0c0,8.78,5,16.75,15,16.75s15-8,15-16.75-5-16.76-15-16.76-15,8-15,16.76M399.7,265.14H411c4.54,0,6.86,2.47,6.86,6.39s-3.17,6.27-6.86,6.27H399.7Zm-3,29.54h3V280.4h11.49c5.75-.22,6.11,4.78,6.38,9.28.09,1.35.09,3.74.84,5h3.34c-1.34-1.62-1.34-6-1.47-8.24-.22-3.83-1.42-6.71-5.57-7.25v-.09c4.1-.81,6.19-4.14,6.19-8.2,0-5.81-4.4-8.37-9.66-8.37H396.67Zm-8.07-16.34H375.1V281h10.83c.14,6.8-4,11.8-11,11.8-8.43,0-12-7.12-12-14.14s3.56-14.15,12-14.15c6.06,0,9.85,4.37,10.25,8.07h3c-1.15-7-6.59-10.68-13.27-10.68-10,0-15,8-15,16.76s5,16.75,15,16.75c4.59,0,8.86-1.93,11-6.53H386l.4,5.85h2.18Z" fill="white"></path>
+        <path d="M269.27,250.89,245.68,261,205.4,164.58,229,154.49c31.07-13.27,59.05-4.48,71.72,25.85l.22.54c12.79,30.6-.59,56.74-31.66,70m249.92-50.33V0h-58L414,77.65,366.78,0h-58V106.17C282,92.32,247.35,91.76,208.72,108.26L185.82,118,136.47,0H83.85L0,200.56H57.4L71.47,165H147.2l68.4,163.69,71.25-30.42c49.7-21.23,74.87-58,75.6-97.71h.09V86l50.33,77.93H414l50.62-78.51V200.56Z" fill="white"></path>
+      </svg>
+    </div>
+  </div>
+  <div class="loader-counter"><span id="count">100</span>%</div>
+  <div class="loader-line" id="loaderLineBg" style="width: 100%;"></div>
+  <div class="loader-line-fill" id="loaderLine" style="width: 100%;"></div>
+</div>
+
+<!-- ====== CURSOR ====== -->
+<div class="cursor-dot" id="dot" style="transform: translate(1157px, 150px);"></div>
+<div class="cursor-circle" id="circle" style="transform: translate(1141px, 134px);"></div>
+
+<!-- ====== PAGE ====== -->
+<div class="page-content visible" id="pageContent">
+
+<!-- NAV -->
+<nav id="mainNav" class="visible">
+  <a href="file:///Users/mattia/Downloads/adm_home_6.html#" class="nav-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520.17 328.69">
+      <path d="M499.63,265.14h10.43c4.19,0,7.08,2.16,7.08,6.57s-2.89,6.58-7.08,6.58H499.63Zm-3,29.54h3V280.9h11.1c5.7,0,9.44-3.37,9.44-9.19s-3.74-9.18-9.44-9.18H496.6Zm-33.05-11.57c0,6.62,3.51,12.25,12.33,12.25s12.39-5.63,12.39-12.25V262.53h-3v19.91c.05,7.47-3.47,10.31-9.36,10.31s-9.35-2.84-9.31-10.31V262.53h-3Zm-33.6-4.5c0-7,3.56-14.15,12-14.15s11.95,7.12,11.95,14.15-3.57,14.14-11.95,14.14-12-7.12-12-14.14m-3,0c0,8.78,5,16.75,15,16.75s15-8,15-16.75-5-16.76-15-16.76-15,8-15,16.76M399.7,265.14H411c4.54,0,6.86,2.47,6.86,6.39s-3.17,6.27-6.86,6.27H399.7Zm-3,29.54h3V280.4h11.49c5.75-.22,6.11,4.78,6.38,9.28.09,1.35.09,3.74.84,5h3.34c-1.34-1.62-1.34-6-1.47-8.24-.22-3.83-1.42-6.71-5.57-7.25v-.09c4.1-.81,6.19-4.14,6.19-8.2,0-5.81-4.4-8.37-9.66-8.37H396.67Zm-8.07-16.34H375.1V281h10.83c.14,6.8-4,11.8-11,11.8-8.43,0-12-7.12-12-14.14s3.56-14.15,12-14.15c6.06,0,9.85,4.37,10.25,8.07h3c-1.15-7-6.59-10.68-13.27-10.68-10,0-15,8-15,16.76s5,16.75,15,16.75c4.59,0,8.86-1.93,11-6.53H386l.4,5.85h2.18Z" fill="#4e4547"></path>
+      <path d="M269.27,250.89,245.68,261,205.4,164.58,229,154.49c31.07-13.27,59.05-4.48,71.72,25.85l.22.54c12.79,30.6-.59,56.74-31.66,70m249.92-50.33V0h-58L414,77.65,366.78,0h-58V106.17C282,92.32,247.35,91.76,208.72,108.26L185.82,118,136.47,0H83.85L0,200.56H57.4L71.47,165H147.2l68.4,163.69,71.25-30.42c49.7-21.23,74.87-58,75.6-97.71h.09V86l50.33,77.93H414l50.62-78.51V200.56Z" fill="#4e4547"></path>
+    </svg>
+  </a>
+  <ul class="nav-links">
+    <li><a href="file:///Users/mattia/Downloads/adm_home_6.html#expertize">Expertize</a></li>
+    <li><a href="file:///Users/mattia/Downloads/adm_home_6.html#portfolio">Portfolio</a></li>
+    <li><a href="file:///Users/mattia/Downloads/adm_home_6.html#about">About</a></li>
+    <li><a href="file:///Users/mattia/Downloads/adm_home_6.html#blog">Blog</a></li>
+    <li><a href="file:///Users/mattia/Downloads/adm_home_6.html#contatti" class="cta-link">Contatti</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-top">
+    <p class="hero-tag in" id="heroTag">Agenzia di Comunicazione &amp; Events</p>
+    <h1 class="hero-title" id="heroTitle">
+      <span class="line"><span class="word-wrap"><span class="word-inner" id="w0" style="transform: translateY(0px); transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);">Progettiamo</span></span></span>
+      <span class="line"><span class="word-wrap"><span class="word-inner" id="w1" style="transform: translateY(0px); transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);">spazi di</span></span></span>
+      <span class="line"><span class="word-wrap"><span class="word-inner red" id="w2" style="transform: translateY(0px); transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);">connessione.</span></span></span>
+    </h1>
+    <div class="hero-rule in" id="heroRule"></div>
+  </div>
+  <div class="hero-bottom">
+    <div class="hero-block hero-block-1 block-stand in" id="hb1">
+      <div class="block-inner block-img-content" style="background:linear-gradient(135deg,#4e4547 0%,#2a2527 100%);">
+        <svg width="90" height="90" viewBox="0 0 100 100" fill="none"><rect x="10" y="10" width="35" height="35" fill="rgba(255,255,255,0.1)"></rect><rect x="55" y="10" width="35" height="35" fill="rgba(255,70,50,0.3)"></rect><rect x="10" y="55" width="35" height="35" fill="rgba(255,70,50,0.15)"></rect><rect x="55" y="55" width="35" height="35" fill="rgba(255,255,255,0.07)"></rect></svg>
+      </div>
+      <div class="hero-img-label">Stand Fieristici</div>
+    </div>
+    <div class="hero-block hero-block-2 in" id="hb2" style="background:linear-gradient(135deg,#3a3336,#4e4547);">
+      <div class="block-inner block-img-content">
+        <svg width="90" height="70" viewBox="0 0 120 80" fill="none"><ellipse cx="60" cy="40" rx="50" ry="30" stroke="rgba(255,70,50,0.4)" stroke-width="2"></ellipse><ellipse cx="60" cy="40" rx="30" ry="18" stroke="rgba(255,255,255,0.15)" stroke-width="2"></ellipse><circle cx="60" cy="40" r="8" fill="rgba(255,70,50,0.5)"></circle></svg>
+      </div>
+      <div class="hero-img-label">Event Design</div>
+    </div>
+    <div class="hero-block hero-block-3 block-red in" id="hb3">
+      <div class="block-inner" style="flex-direction:column;justify-content:flex-end;padding:44px;align-items:flex-start;">
+        <p>Trasformiamo idee in esperienze memorabili. Stand fieristici, eventi e spazi retail che parlano il linguaggio del tuo brand.</p>
+        <a href="file:///Users/mattia/Downloads/adm_home_6.html#expertize">Scopri come</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item">Stand Fieristici <span class="dot"></span></div>
+    <div class="marquee-item">Event Design <span class="dot"></span></div>
+    <div class="marquee-item">Contract &amp; Retail <span class="dot"></span></div>
+    <div class="marquee-item">Branding <span class="dot"></span></div>
+    <div class="marquee-item">Comunicazione <span class="dot"></span></div>
+    <div class="marquee-item">Digital Marketing <span class="dot"></span></div>
+    <div class="marquee-item">Stand Fieristici <span class="dot"></span></div>
+    <div class="marquee-item">Event Design <span class="dot"></span></div>
+    <div class="marquee-item">Contract &amp; Retail <span class="dot"></span></div>
+    <div class="marquee-item">Branding <span class="dot"></span></div>
+    <div class="marquee-item">Comunicazione <span class="dot"></span></div>
+    <div class="marquee-item">Digital Marketing <span class="dot"></span></div>
+  </div>
+</div>
+
+<!-- EXPERTIZE -->
+<section class="expertize" id="expertize">
+  <div class="section-header reveal">
+    <div><p class="section-tag clip-left">Le nostre expertise</p><h2 class="section-title split-reveal"><span class="sr-line"><span class="sr-inner">Cosa</span></span><span class="sr-line"><span class="sr-inner">sappiamo fare</span></span></h2></div>
+    <p class="section-desc fade-up">Un approccio integrato che unisce progettazione, creatività e tecnologia per creare esperienze che lasciano il segno.</p>
+  </div><div class="draw-line"></div>
+  <div class="expertize-grid">
+    <div class="exp-card stagger-item" style="transition-delay: 0s;"><div class="exp-num clip-left">01 — Stand</div><h3 class="exp-title">Stand<br>Fieristici</h3><p class="exp-text fade-up">Progettiamo e realizziamo stand che catturano l'attenzione e raccontano la tua storia in ogni fiera internazionale.</p><a href="file:///Users/mattia/Downloads/adm_home_6.html#" class="exp-arrow">Approfondisci</a></div>
+    <div class="exp-card stagger-item" style="transition-delay: 0.12s;"><div class="exp-num clip-left">02 — Event</div><h3 class="exp-title">Event<br>Design</h3><p class="exp-text fade-up">Dall'ideazione all'esecuzione, ogni evento diventa un'esperienza unica e memorabile per il tuo pubblico.</p><a href="file:///Users/mattia/Downloads/adm_home_6.html#" class="exp-arrow">Approfondisci</a></div>
+    <div class="exp-card stagger-item" style="transition-delay: 0.24s;"><div class="exp-num clip-left">03 — Retail</div><h3 class="exp-title">Contract<br>&amp; Retail</h3><p class="exp-text fade-up">Spazi commerciali e retail progettati per connettere brand e consumatori in ambienti che ispirano e convertono.</p><a href="file:///Users/mattia/Downloads/adm_home_6.html#" class="exp-arrow">Approfondisci</a></div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="portfolio" id="portfolio">
+  <div class="section-header reveal">
+    <div><p class="section-tag clip-left">I nostri lavori</p><h2 class="section-title split-reveal"><span class="sr-line"><span class="sr-inner">Portfolio</span></span></h2></div>
+    <p class="section-desc fade-up">Ogni progetto è una storia di collaborazione, creatività e risultati concreti per i nostri clienti.</p>
+  </div><div class="draw-line"></div>
+  <div class="portfolio-grid reveal">
+    <div class="port-item large" style="background:#2a2527;">
+      <div class="port-inner" style="background:linear-gradient(160deg,#4e4547,#2a2527);min-height:500px;"><div style="width:120px;height:120px;border:2px solid rgba(255,70,50,0.4);transform:rotate(45deg);"></div></div>
+      <div class="port-info"><div class="port-event clip-left">Salone del Mobile</div><div class="port-client">Jeep — Stand 2024</div></div>
+    </div>
+    <div class="port-item" style="background:#3a3336;">
+      <div class="port-inner" style="background:linear-gradient(135deg,#FF4632,#c02010);"><div style="width:60px;height:60px;background:rgba(255,255,255,0.15);border-radius:50%;"></div></div>
+      <div class="port-info"><div class="port-event clip-left">EICMA</div><div class="port-client">Garmont — Event</div></div>
+    </div>
+    <div class="port-item" style="background:#4e4547;">
+      <div class="port-inner" style="background:linear-gradient(135deg,#4e4547,#6a5d5f);"><div style="width:80px;height:3px;background:rgba(255,70,50,0.6);"></div></div>
+      <div class="port-info"><div class="port-event clip-left">Contract</div><div class="port-client">Sidi — Retail Space</div></div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:60px;" class="reveal"><a href="file:///Users/mattia/Downloads/adm_home_6.html#" class="btn-red">Vedi tutto il portfolio</a></div>
+</section>
+
+<!-- ABOUT -->
+<section class="step-section" id="metodo">
+  <div class="step-intro">
+    <div class="step-intro-tag clip-left">Il nostro processo</div>
+    <h2 class="step-intro-title split-reveal">
+      <span class="sr-line"><span class="sr-inner">Con voi in ogni</span></span>
+      <span class="sr-line"><span class="sr-inner">fase del progetto.</span></span>
+    </h2>
+    <p class="step-intro-text fade-up">Dalla prima chiamata alla consegna finale, ogni passo è pensato per semplificare la collaborazione e garantire risultati che superano le aspettative.</p>
+  </div>
+  <div class="steps-list">
+    <div class="step-item">
+      <div class="step-letter">(a)</div>
+      <div class="step-label">Brief &amp;<br>Strategia<span>Dove nascono le idee</span></div>
+      <div class="step-body">Ascoltiamo e interpretiamo le vostre necessità con cura e attenzione. Il dialogo aperto e la condivisione delle visioni sono il punto di partenza per ogni progetto di successo.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-letter">(b)</div>
+      <div class="step-label">Concept &amp;<br>Design<span>Dove la creatività prende forma</span></div>
+      <div class="step-body">I nostri creativi trasformano la strategia in soluzioni visive distintive. Ogni proposta è dettagliata, originale e costruita intorno all'unicità del vostro brand.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-letter">(c)</div>
+      <div class="step-label">Produzione &amp;<br>Realizzazione<span>Dove lo straordinario è possibile</span></div>
+      <div class="step-body">Artigiani e tecnici esperti concretizzano ogni idea con la massima precisione. Tecnologie avanzate e materiali selezionati garantiscono standard qualitativi elevati.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-letter">(d)</div>
+      <div class="step-label">Lancio &amp;<br>Supporto<span>Dove il progetto diventa realtà</span></div>
+      <div class="step-body">Presenza sul campo, attenzione e disponibilità continua. La nostra esperienza permette di anticipare ogni necessità e gestire ogni dettaglio fino alla fine.</div>
+    </div>
+  </div>
+</section><section class="about-strip" id="about">
+  <div class="about-content reveal">
+    <p class="section-tag clip-left">Chi siamo</p>
+    <h2 class="section-title split-reveal"><span class="sr-line"><span class="sr-inner">Il metodo</span></span><span class="sr-line"><span class="sr-inner">ADM</span></span></h2>
+    <p class="about-text fade-up">Non siamo una normale agenzia. Siamo progettisti di connessioni, costruttori di esperienze che uniscono brand e persone in spazi fisici che ispirano.</p>
+    <div class="about-stats">
+      <div><div class="stat-num count-up" data-target="15" data-suffix="+">0+</div><div class="stat-label">Anni</div></div>
+      <div><div class="stat-num count-up" data-target="200" data-suffix="+">0+</div><div class="stat-label">Progetti</div></div>
+      <div><div class="stat-num count-up" data-target="80" data-suffix="+">0+</div><div class="stat-label">Clienti</div></div>
+    </div>
+  </div>
+  <div class="about-visual"><div class="about-big-text">ADM</div><div class="about-quote">"Progettiamo e costruiamo spazi di connessione."</div></div>
+</section>
+
+<!-- BLOG -->
+<section class="blog" id="blog">
+  <div class="section-header reveal">
+    <div><p class="section-tag clip-left">News &amp; Insights</p><h2 class="section-title split-reveal"><span class="sr-line"><span class="sr-inner">Journal</span></span></h2></div>
+    <p class="section-desc fade-up">Podcast, news e aggiornamenti dal mondo della comunicazione, degli eventi e del design.</p>
+  </div><div class="draw-line"></div>
+  <div class="blog-grid">
+    <div class="blog-card stagger-item" style="transition-delay: 0s;"><div class="blog-cat clip-left">Podcast</div><h3 class="blog-title">Il futuro degli stand fieristici nell'era digitale</h3><p class="blog-excerpt fade-up">Come l'integrazione tra fisico e digitale sta rivoluzionando il modo in cui i brand comunicano nelle fiere.</p><a href="file:///Users/mattia/Downloads/adm_home_6.html#" class="blog-link">Ascolta ora</a></div>
+    <div class="blog-card stagger-item" style="transition-delay: 0.12s;"><div class="blog-cat clip-left">News</div><h3 class="blog-title">ADM al Salone del Mobile 2025: i nostri progetti</h3><p class="blog-excerpt fade-up">Uno sguardo ai progetti che abbiamo realizzato per i nostri clienti nella più importante fiera del design.</p><a href="file:///Users/mattia/Downloads/adm_home_6.html#" class="blog-link">Leggi l'articolo</a></div>
+    <div class="blog-card stagger-item" style="transition-delay: 0.24s;"><div class="blog-cat clip-left">Social</div><h3 class="blog-title">Behind the scenes: come nasce uno stand da zero</h3><p class="blog-excerpt fade-up">Dal primo brief alla consegna finale: il processo creativo e produttivo che porta alla realizzazione di uno stand.</p><a href="file:///Users/mattia/Downloads/adm_home_6.html#" class="blog-link">Guarda il video</a></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="parallax-wrap">
+  <div class="parallax-img" id="parallaxImg">
+    <div class="parallax-img-inner"></div>
+  </div>
+  <div class="parallax-text-overlay split-reveal">
+    <span class="sr-line"><span class="sr-inner">Ci piace collaborare con brand</span></span>
+    <span class="sr-line"><span class="sr-inner">e persone che osano</span></span>
+    <span class="sr-line"><span class="sr-inner" style="color:var(--red)">essere diversi.</span></span>
+  </div>
+</div><section class="cta" id="contatti">
+  <p class="section-tag clip-left">Inizia il tuo progetto</p>
+  <h2 class="cta-title split-reveal"><span class="sr-line"><span class="sr-inner">Hai un'idea?</span></span><span class="sr-line"><span class="sr-inner">Costruiamola</span></span><span class="sr-line"><span class="sr-inner"><span>insieme.</span></span></span></h2>
+  <br><br>
+  <a href="mailto:info@admgroupsrl.com" class="btn-red">Contattaci ora</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520.17 328.69">
+      <path d="M499.63,265.14h10.43c4.19,0,7.08,2.16,7.08,6.57s-2.89,6.58-7.08,6.58H499.63Zm-3,29.54h3V280.9h11.1c5.7,0,9.44-3.37,9.44-9.19s-3.74-9.18-9.44-9.18H496.6Zm-33.05-11.57c0,6.62,3.51,12.25,12.33,12.25s12.39-5.63,12.39-12.25V262.53h-3v19.91c.05,7.47-3.47,10.31-9.36,10.31s-9.35-2.84-9.31-10.31V262.53h-3Zm-33.6-4.5c0-7,3.56-14.15,12-14.15s11.95,7.12,11.95,14.15-3.57,14.14-11.95,14.14-12-7.12-12-14.14m-3,0c0,8.78,5,16.75,15,16.75s15-8,15-16.75-5-16.76-15-16.76-15,8-15,16.76M399.7,265.14H411c4.54,0,6.86,2.47,6.86,6.39s-3.17,6.27-6.86,6.27H399.7Zm-3,29.54h3V280.4h11.49c5.75-.22,6.11,4.78,6.38,9.28.09,1.35.09,3.74.84,5h3.34c-1.34-1.62-1.34-6-1.47-8.24-.22-3.83-1.42-6.71-5.57-7.25v-.09c4.1-.81,6.19-4.14,6.19-8.2,0-5.81-4.4-8.37-9.66-8.37H396.67Zm-8.07-16.34H375.1V281h10.83c.14,6.8-4,11.8-11,11.8-8.43,0-12-7.12-12-14.14s3.56-14.15,12-14.15c6.06,0,9.85,4.37,10.25,8.07h3c-1.15-7-6.59-10.68-13.27-10.68-10,0-15,8-15,16.76s5,16.75,15,16.75c4.59,0,8.86-1.93,11-6.53H386l.4,5.85h2.18Z" fill="rgba(255,255,255,0.4)"></path>
+      <path d="M269.27,250.89,245.68,261,205.4,164.58,229,154.49c31.07-13.27,59.05-4.48,71.72,25.85l.22.54c12.79,30.6-.59,56.74-31.66,70m249.92-50.33V0h-58L414,77.65,366.78,0h-58V106.17C282,92.32,247.35,91.76,208.72,108.26L185.82,118,136.47,0H83.85L0,200.56H57.4L71.47,165H147.2l68.4,163.69,71.25-30.42c49.7-21.23,74.87-58,75.6-97.71h.09V86l50.33,77.93H414l50.62-78.51V200.56Z" fill="rgba(255,255,255,0.4)"></path>
+    </svg>
+  </div>
+  <ul class="footer-nav">
+    <li><a href="file:///Users/mattia/Downloads/adm_home_6.html#">About</a></li>
+    <li><a href="file:///Users/mattia/Downloads/adm_home_6.html#">Expertize</a></li>
+    <li><a href="file:///Users/mattia/Downloads/adm_home_6.html#">Portfolio</a></li>
+    <li><a href="file:///Users/mattia/Downloads/adm_home_6.html#">Blog</a></li>
+    <li><a href="file:///Users/mattia/Downloads/adm_home_6.html#">Contatti</a></li>
+  </ul>
+  <div class="footer-right">
+    <a href="mailto:info@admgroupsrl.com" class="footer-contact">info@admgroupsrl.com</a>
+    <a href="tel:+393481454483" class="footer-contact">+39 348 145 4483</a>
+    <p class="footer-copy">© 2025 ADM Group Srl</p>
+  </div>
+</footer>
+
+</div><!-- end page-content -->
+
+<script>
+// ====== LOADER ======
+const loader = document.getElementById('loader');
+const loaderLogo = document.getElementById('loaderLogo');
+const loaderLine = document.getElementById('loaderLine');
+const loaderLineBg = document.getElementById('loaderLineBg');
+const countEl = document.getElementById('count');
+const pageContent = document.getElementById('pageContent');
+const mainNav = document.getElementById('mainNav');
+
+let progress = 0;
+const duration = 1400;
+const start = performance.now();
+
+// Show logo after short delay
+setTimeout(() => {
+  loaderLogo.style.opacity = '1';
+  loaderLogo.style.transform = 'translateY(0)';
+}, 200);
+
+// Grow lines
+setTimeout(() => {
+  loaderLineBg.style.width = '100%';
+  loaderLine.style.width = '100%';
+}, 250);
+
+// Animate counter
+function animateCount(ts) {
+  const elapsed = ts - start;
+  const p = Math.min(elapsed / duration, 1);
+  // ease out cubic
+  const eased = 1 - Math.pow(1 - p, 3);
+  progress = Math.floor(eased * 100);
+  countEl.textContent = progress;
+  if (p < 1) {
+    requestAnimationFrame(animateCount);
+  } else {
+    countEl.textContent = 100;
+    // Trigger exit
+    setTimeout(startExit, 200);
+  }
+}
+requestAnimationFrame(animateCount);
+
+function startExit() {
+  // Panels slide out
+  loader.classList.add('done');
+  pageContent.classList.add('visible');
+
+  setTimeout(() => {
+    loader.style.display = 'none';
+    // Nav slides down
+    mainNav.classList.add('visible');
+    // Hero reveals
+    revealHero();
+  }, 900);
+}
+
+function revealHero() {
+  // Tag
+  setTimeout(() => document.getElementById('heroTag').classList.add('in'), 100);
+
+  // Words stagger
+  ['w0','w1','w2'].forEach((id, i) => {
+    setTimeout(() => {
+      document.getElementById(id).style.transform = 'translateY(0)';
+      document.getElementById(id).style.transition = 'transform 1s cubic-bezier(0.16,1,0.3,1)';
+    }, 150 + i * 120);
+  });
+
+  // Rule
+  setTimeout(() => document.getElementById('heroRule').classList.add('in'), 200);
+
+  // Hero blocks
+  setTimeout(() => document.getElementById('hb1').classList.add('in'), 500);
+  setTimeout(() => document.getElementById('hb2').classList.add('in'), 620);
+  setTimeout(() => document.getElementById('hb3').classList.add('in'), 740);
+}
+
+// ====== CURSOR ======
+const dot = document.getElementById('dot');
+const circle = document.getElementById('circle');
+let mx = 0, my = 0, cx = 0, cy = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.transform = `translate(${mx - 4}px, ${my - 4}px)`;
+});
+
+(function animateCircle() {
+  cx += (mx - cx) * 0.1;
+  cy += (my - cy) * 0.1;
+  circle.style.transform = `translate(${cx - 20}px, ${cy - 20}px)`;
+  requestAnimationFrame(animateCircle);
+})();
+
+document.querySelectorAll('a, button, .exp-card, .port-item, .blog-card').forEach(el => {
+  el.addEventListener('mouseenter', () => { circle.style.width = '64px'; circle.style.height = '64px'; });
+  el.addEventListener('mouseleave', () => { circle.style.width = '40px'; circle.style.height = '40px'; });
+});
+
+// ====== SCROLL REVEAL ======
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 100);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+
+
+<style>
+/* ===== SPLIT TEXT REVEAL ===== */
+.split-reveal .sr-line {
+  display: block;
+  overflow: hidden;
+}
+.split-reveal .sr-inner {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.split-reveal.in-view .sr-inner {
+  transform: translateY(0);
+}
+/* Stagger each line */
+.split-reveal.in-view .sr-line:nth-child(1) .sr-inner { transition-delay: 0s; }
+.split-reveal.in-view .sr-line:nth-child(2) .sr-inner { transition-delay: 0.08s; }
+.split-reveal.in-view .sr-line:nth-child(3) .sr-inner { transition-delay: 0.16s; }
+.split-reveal.in-view .sr-line:nth-child(4) .sr-inner { transition-delay: 0.24s; }
+.split-reveal.in-view .sr-line:nth-child(5) .sr-inner { transition-delay: 0.32s; }
+
+/* ===== CLIP FROM LEFT (tag/labels) ===== */
+.clip-left {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.clip-left.in-view {
+  clip-path: inset(0 0% 0 0);
+}
+
+/* ===== FADE SLIDE UP (body text) ===== */
+.fade-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+.fade-up.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== COUNTER NUMBERS ===== */
+.count-up {
+  display: inline-block;
+}
+
+/* ===== HORIZONTAL SCROLL LINE ===== */
+.draw-line {
+  display: block;
+  height: 1px;
+  background: rgba(78,69,71,0.15);
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.draw-line.in-view {
+  transform: scaleX(1);
+}
+
+/* ===== STEP ITEMS (dass.it style) ===== */
+.step-section {
+  padding: 120px 52px;
+  background: var(--offwhite);
+}
+.step-intro {
+  max-width: 700px;
+  margin-bottom: 100px;
+}
+.step-intro-tag {
+  font-family: Aptos, 'Segoe UI', sans-serif;
+  font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+  color: var(--red); margin-bottom: 28px; font-weight: 600;
+}
+.step-intro-title {
+  font-family: Aptos, 'Segoe UI', sans-serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 600; line-height: 1.1;
+  letter-spacing: -1px; color: var(--dark);
+  margin-bottom: 28px;
+}
+.step-intro-text {
+  font-size: 15px; line-height: 1.85;
+  color: rgba(78,69,71,0.5);
+}
+
+.steps-list { display: flex; flex-direction: column; gap: 0; }
+
+.step-item {
+  display: grid;
+  grid-template-columns: 80px 1fr 1fr;
+  gap: 0 52px;
+  padding: 60px 0;
+  border-top: 1px solid rgba(78,69,71,0.1);
+  align-items: start;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.step-item.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+.step-letter {
+  font-family: Aptos, 'Segoe UI', sans-serif;
+  font-size: 13px; letter-spacing: 2px;
+  color: rgba(78,69,71,0.3); font-weight: 600;
+  padding-top: 6px;
+}
+.step-label {
+  font-family: Aptos, 'Segoe UI', sans-serif;
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 600; letter-spacing: -1px;
+  line-height: 1; color: var(--dark);
+}
+.step-label span {
+  display: block;
+  font-size: 13px; letter-spacing: 0px;
+  font-weight: 400; color: var(--red);
+  margin-top: 12px; font-family: 'Calibri Light', Calibri, sans-serif;
+}
+.step-body {
+  font-size: 14px; line-height: 1.85;
+  color: rgba(78,69,71,0.5);
+  padding-top: 8px;
+}
+
+/* ===== PARALLAX IMAGE ===== */
+.parallax-wrap {
+  position: relative; overflow: hidden;
+  height: 420px;
+}
+.parallax-img {
+  position: absolute;
+  inset: -15% 0;
+  background: var(--dark);
+  will-change: transform;
+  display: flex; align-items: center; justify-content: center;
+}
+.parallax-img-inner {
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, #4e4547 0%, #FF4632 100%);
+  opacity: 0.8;
+}
+.parallax-text-overlay {
+  position: absolute;
+  bottom: 52px; left: 52px; right: 52px;
+  font-family: Aptos, 'Segoe UI', sans-serif;
+  font-size: clamp(22px, 3vw, 36px);
+  font-weight: 600; color: var(--white);
+  line-height: 1.3; letter-spacing: -0.5px;
+  max-width: 600px;
+}
+
+/* ===== STAGGER CARDS ===== */
+.stagger-item {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.stagger-item.in-view { opacity: 1; transform: translateY(0); }
+</style>
+
+<script>
+// ==========================================
+// INJECT DASS-STYLE ANIMATIONS INTO PAGE
+// ==========================================
+
+// 1. Apply split-reveal to all section titles
+document.querySelectorAll('.section-title, .cta-title').forEach(el => {
+  const html = el.innerHTML;
+  const lines = html.split('<br>');
+  el.innerHTML = lines.map(line =>
+    `<span class="sr-line"><span class="sr-inner">${line}</span></span>`
+  ).join('');
+  el.classList.add('split-reveal');
+});
+
+// 2. Apply clip-left to all section tags
+document.querySelectorAll('.section-tag, .exp-num, .blog-cat, .port-event').forEach(el => {
+  el.classList.add('clip-left');
+});
+
+// 3. Apply fade-up to body texts
+document.querySelectorAll('.section-desc, .exp-text, .blog-excerpt, .about-text, .step-body').forEach(el => {
+  el.classList.add('fade-up');
+});
+
+// 4. Apply draw-line after section headers
+document.querySelectorAll('.section-header').forEach(el => {
+  const line = document.createElement('div');
+  line.className = 'draw-line';
+  el.after(line);
+});
+
+// 5. Make stat numbers count up on scroll
+document.querySelectorAll('.stat-num').forEach(el => {
+  const text = el.textContent.trim();
+  const num = parseInt(text);
+  const suffix = text.replace(num, '');
+  el.dataset.target = num;
+  el.dataset.suffix = suffix;
+  el.textContent = '0' + suffix;
+  el.classList.add('count-up');
+});
+
+// 6. Stagger blog cards and exp cards
+document.querySelectorAll('.blog-card, .exp-card').forEach((el, i) => {
+  el.classList.remove('reveal');
+  el.classList.add('stagger-item');
+  el.style.transitionDelay = (i % 3) * 0.12 + 's';
+});
+
+// ==========================================
+// INJECT STEP SECTION before .about-strip
+// ==========================================
+const aboutStrip = document.getElementById('about');
+const stepSection = document.createElement('section');
+stepSection.className = 'step-section';
+stepSection.id = 'metodo';
+stepSection.innerHTML = `
+  <div class="step-intro">
+    <div class="step-intro-tag clip-left">Il nostro processo</div>
+    <h2 class="step-intro-title split-reveal">
+      <span class="sr-line"><span class="sr-inner">Con voi in ogni</span></span>
+      <span class="sr-line"><span class="sr-inner">fase del progetto.</span></span>
+    </h2>
+    <p class="step-intro-text fade-up">Dalla prima chiamata alla consegna finale, ogni passo è pensato per semplificare la collaborazione e garantire risultati che superano le aspettative.</p>
+  </div>
+  <div class="steps-list">
+    <div class="step-item">
+      <div class="step-letter">(a)</div>
+      <div class="step-label">Brief &<br>Strategia<span>Dove nascono le idee</span></div>
+      <div class="step-body">Ascoltiamo e interpretiamo le vostre necessità con cura e attenzione. Il dialogo aperto e la condivisione delle visioni sono il punto di partenza per ogni progetto di successo.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-letter">(b)</div>
+      <div class="step-label">Concept &<br>Design<span>Dove la creatività prende forma</span></div>
+      <div class="step-body">I nostri creativi trasformano la strategia in soluzioni visive distintive. Ogni proposta è dettagliata, originale e costruita intorno all'unicità del vostro brand.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-letter">(c)</div>
+      <div class="step-label">Produzione &<br>Realizzazione<span>Dove lo straordinario è possibile</span></div>
+      <div class="step-body">Artigiani e tecnici esperti concretizzano ogni idea con la massima precisione. Tecnologie avanzate e materiali selezionati garantiscono standard qualitativi elevati.</div>
+    </div>
+    <div class="step-item">
+      <div class="step-letter">(d)</div>
+      <div class="step-label">Lancio &<br>Supporto<span>Dove il progetto diventa realtà</span></div>
+      <div class="step-body">Presenza sul campo, attenzione e disponibilità continua. La nostra esperienza permette di anticipare ogni necessità e gestire ogni dettaglio fino alla fine.</div>
+    </div>
+  </div>
+`;
+aboutStrip.before(stepSection);
+
+// ==========================================
+// INJECT PARALLAX QUOTE before CTA
+// ==========================================
+const cta = document.getElementById('contatti');
+const parallaxSection = document.createElement('div');
+parallaxSection.className = 'parallax-wrap';
+parallaxSection.innerHTML = `
+  <div class="parallax-img" id="parallaxImg">
+    <div class="parallax-img-inner"></div>
+  </div>
+  <div class="parallax-text-overlay split-reveal">
+    <span class="sr-line"><span class="sr-inner">Ci piace collaborare con brand</span></span>
+    <span class="sr-line"><span class="sr-inner">e persone che osano</span></span>
+    <span class="sr-line"><span class="sr-inner" style="color:var(--red)">essere diversi.</span></span>
+  </div>
+`;
+cta.before(parallaxSection);
+
+// ==========================================
+// INTERSECTION OBSERVER
+// ==========================================
+const animObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      el.classList.add('in-view');
+
+      // Count up numbers
+      if (el.classList.contains('count-up')) {
+        const target = parseInt(el.dataset.target);
+        const suffix = el.dataset.suffix || '';
+        let current = 0;
+        const step = Math.ceil(target / 40);
+        const timer = setInterval(() => {
+          current = Math.min(current + step, target);
+          el.textContent = current + suffix;
+          if (current >= target) clearInterval(timer);
+        }, 35);
+      }
+
+      animObs.unobserve(el);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+// Observe all animated elements
+const selectors = [
+  '.split-reveal', '.clip-left', '.fade-up',
+  '.draw-line', '.step-item', '.stagger-item',
+  '.count-up', '.reveal', '.parallax-text-overlay'
+];
+selectors.forEach(sel => {
+  document.querySelectorAll(sel).forEach(el => animObs.observe(el));
+});
+
+// ==========================================
+// PARALLAX SCROLL
+// ==========================================
+const parallaxImg = document.getElementById('parallaxImg');
+function handleParallax() {
+  if (!parallaxImg) return;
+  const wrap = parallaxImg.parentElement;
+  const rect = wrap.getBoundingClientRect();
+  const windowH = window.innerHeight;
+  if (rect.bottom < 0 || rect.top > windowH) return;
+  const progress = (windowH - rect.top) / (windowH + rect.height);
+  const offset = (progress - 0.5) * 120;
+  parallaxImg.style.transform = `translateY(${offset}px)`;
+}
+
+window.addEventListener('scroll', handleParallax, { passive: true });
+handleParallax();
+</script>
+</body></html>
